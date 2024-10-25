@@ -1,0 +1,29 @@
+# Logs
+logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Testing
+coverage/
+
+# Optional npm cache directory
+.npm/
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Optional VS Code settings
+.vscode/*
+
+.DS_Store
+
+*.zip
