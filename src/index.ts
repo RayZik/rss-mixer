@@ -1,4 +1,4 @@
-import { FEEDS } from './config/feeds';
+import { getFeeds } from './config/feeds';
 import { FeedItem, fetchRSSFeed } from './services/rss.service';
 import { generateRSSFeed } from './services/xml.service';
 import logger from './utils/logger';
@@ -6,10 +6,12 @@ import logger from './utils/logger';
 export const handler = async (event: any, context: any): Promise<{ statusCode: number, headers: { [key: string]: string }, body: string }> => {
   try {
     const allItems: FeedItem[] = [];
+    const feeds = getFeeds();
 
-    for (const feedUrl of FEEDS) {
-      const items = await fetchRSSFeed(feedUrl);
-      allItems.push(...items);
+    for (const feedUrl of feeds) {
+      const feed = await fetchRSSFeed(feedUrl);
+
+      allItems.push(...feed.items);
     }
 
     allItems.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());

@@ -2,7 +2,6 @@
 import Parser from 'rss-parser';
 import logger from '../utils/logger';
 
-const parser = new Parser();
 
 export type FeedItem = {
   title: string;
@@ -10,17 +9,30 @@ export type FeedItem = {
   pubDate: string;
   content?: string;
   contentSnippet?: string;
+  language?: string;
+  categories?: string[]
+  comments?: string;
 }
 
-export async function fetchRSSFeed(url: string): Promise<FeedItem[]> {
+type AdditionalFields = { language?: string };
+
+export type RssFeedResponse = AdditionalFields & Parser.Output<FeedItem>;
+
+export async function fetchRSSFeed(url: string): Promise<RssFeedResponse> {
+  const parser = new Parser<AdditionalFields, FeedItem>();
+
   try {
     const feed = await parser.parseURL(url);
     logger.info(`Successfully fetched feed from ${url}`);
 
-    return feed.items as FeedItem[];
+    feed.items.forEach(item => {
+      item.language = feed.language;
+    });
+
+    return feed;
   } catch (error) {
     const err = error as Error;
     logger.error(`Failed to fetch RSS feed from ${url}: ${err.message}`);
-    return [];
+    throw error;
   }
 }
