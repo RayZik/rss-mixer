@@ -1,8 +1,6 @@
 const FEEDS_RU = [
   'https://habr.com/ru/rss/articles',
   'https://tproger.ru/feed/',
-  'https://www.computerra.ru/feed/',
-  'https://devby.io/rss',
 ]
 
 const FEEDS_EN = [
