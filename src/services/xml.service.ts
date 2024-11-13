@@ -16,12 +16,13 @@ function removeQueryParams(url: string): string {
   }
 }
 
-export function generateRSSFeed(items: FeedItem[], title = 'Combined RSS Feed', description = 'Aggregated RSS'): string {
+export function generateRSSFeed(sourceRss: string, items: FeedItem[], title = 'DevDrafts | RSS', description = 'RSS for the @devdrafts_rss telegram channel'): string {
   const rssFeed = builder.create('rss', { encoding: 'utf-8' })
     .att('version', '2.0')
     .ele('channel')
     .ele('title', sanitizeText(title)).up()
-    .ele('description', sanitizeText(description)).up();
+    .ele('description', sanitizeText(description)).up()
+    .ele('source', sourceRss).up();
 
   items.forEach(item => {
     const itemElement = rssFeed.ele('item')

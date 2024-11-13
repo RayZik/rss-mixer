@@ -9,7 +9,7 @@ export const handler = async (event: any, context: any): Promise<{ statusCode: n
 
     const feed = await fetchRSSFeed(feedUrl);
 
-    const xml = generateRSSFeed(feed.items);
+    const xml = generateRSSFeed(feedUrl, feed.items);
 
     logger.info('Generated new RSS feed');
     return {
