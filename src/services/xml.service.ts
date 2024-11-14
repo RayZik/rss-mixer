@@ -16,17 +16,17 @@ function removeQueryParams(url: string): string {
   }
 }
 
-export function generateRSSFeed(sourceRss: string, items: FeedItem[], title = 'DevDrafts | RSS', description = 'RSS for the @devdrafts_rss telegram channel'): string {
+export function generateRSSFeed(items: FeedItem[], title = 'DevDrafts | RSS', description = 'RSS for the @devdrafts_rss telegram channel'): string {
   const rssFeed = builder.create('rss', { encoding: 'utf-8' })
     .att('version', '2.0')
     .ele('channel')
     .ele('title', sanitizeText(title)).up()
-    .ele('description', sanitizeText(description)).up()
-    .ele('source', sourceRss).up();
+    .ele('description', sanitizeText(description)).up();
 
   items.forEach(item => {
     const itemElement = rssFeed.ele('item')
       .ele('title', sanitizeText(item.title)).up()
+      .ele('source', removeQueryParams(item.source)).up()
       .ele('link', removeQueryParams(item.link)).up()
       .ele('pubDate', item.pubDate).up()
       .ele('description', sanitizeText(item.contentSnippet || item.content || '')).up()

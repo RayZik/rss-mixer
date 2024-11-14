@@ -1,15 +1,21 @@
-import { getFeed } from './config/feeds';
-import { fetchRSSFeed } from './services/rss.service';
+import { getFeeds } from './config/feeds';
+import { FeedItem, fetchRSSFeed } from './services/rss.service';
 import { generateRSSFeed } from './services/xml.service';
 import logger from './utils/logger';
 
 export const handler = async (event: any, context: any): Promise<{ statusCode: number, headers: { [key: string]: string }, body: string }> => {
   try {
-    const feedUrl = getFeed();
+    const allItems: FeedItem[] = [];
+    const feeds = getFeeds();
 
-    const feed = await fetchRSSFeed(feedUrl);
+    for (const feedUrl of feeds) {
+      const feed = await fetchRSSFeed(feedUrl);
 
-    const xml = generateRSSFeed(feedUrl, feed.items);
+      allItems.push(...feed.items);
+    }
+
+    allItems.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+    const xml = generateRSSFeed(allItems);
 
     logger.info('Generated new RSS feed');
     return {

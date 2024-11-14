@@ -14,10 +14,8 @@ const FEEDS_EN = [
   'https://techcrunch.com/feed/',
 ];
 
-export const getFeed = (): string => {
+export const getFeeds = (): string[] => {
   const probability = Math.random();
 
-  const feeds = probability < 0.5 ? FEEDS_RU : FEEDS_EN;
-
-  return feeds[Math.floor(Math.random() * feeds.length)];
+  return probability < 0.5 ? FEEDS_RU : FEEDS_EN;
 };

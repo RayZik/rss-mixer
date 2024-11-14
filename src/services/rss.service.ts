@@ -12,6 +12,7 @@ export type FeedItem = {
   language?: string;
   categories?: string[]
   comments?: string;
+  source: string;
 }
 
 type AdditionalFields = { language?: string };
@@ -27,6 +28,7 @@ export async function fetchRSSFeed(url: string): Promise<RssFeedResponse> {
 
     feed.items.forEach(item => {
       item.language = feed.language;
+      item.source = url;
     });
 
     return feed;
